@@ -1,0 +1,664 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Naswa 💜</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --envelope-pink: #ffc9d9;
+      --envelope-dark: #ff9bb3;
+      --card-cream: #fffef9;
+      --text-primary: #2a1a1f;
+      --text-muted: #6b5a5e;
+      --accent: #b48ead;
+      --accent-light: #d4b5d4;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Archivo', sans-serif;
+      min-height: 100vh;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(255, 200, 220, 0.3), transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(180, 142, 173, 0.25), transparent 50%),
+        linear-gradient(135deg, #fef5f8 0%, #f9f3f7 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Floating elements background */
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0.15;
+      animation: float-up 15s infinite ease-in-out;
+    }
+    
+    @keyframes float-up {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.15;
+      }
+      90% {
+        opacity: 0.1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Floating balloons */
+    .balloon {
+      position: absolute;
+      font-size: 40px;
+      opacity: 0;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+    
+    @keyframes balloon-float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-150px) translateX(var(--sway)) rotate(15deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Envelope container */
+    .envelope-container {
+      position: relative;
+      width: 400px;
+      height: 280px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .envelope-container:hover {
+      transform: scale(1.05);
+    }
+    
+    .envelope-container.opened {
+      cursor: default;
+      transform: scale(1);
+    }
+    
+    /* Envelope body */
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: var(--envelope-pink);
+      border-radius: 8px;
+      box-shadow: 
+        0 10px 30px rgba(255, 155, 179, 0.3),
+        0 1px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    /* Envelope flap (top) */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 200px solid transparent;
+      border-right: 200px solid transparent;
+      border-top: 140px solid var(--envelope-dark);
+      transform-origin: top center;
+      transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 3;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+    
+    .envelope-container.opened .envelope-flap {
+      transform: rotateX(180deg);
+    }
+    
+    /* Click me text */
+    .click-me {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 2px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    
+    .envelope-container.opened .click-me {
+      opacity: 0;
+    }
+    
+    /* Pulse animation for click me */
+    @keyframes pulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+    
+    .click-me {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    /* Card inside envelope */
+    .card {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      width: 90%;
+      background: var(--card-cream);
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s,
+                  opacity 0.5s ease 0.3s;
+      z-index: 1;
+    }
+    
+    .envelope-container.opened .card {
+      transform: translateX(-50%) translateY(20px);
+      opacity: 1;
+    }
+    
+    /* Birthday content - hidden until card is fully visible */
+    .birthday-content {
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(255, 200, 220, 0.3), transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(180, 142, 173, 0.25), transparent 50%),
+        linear-gradient(135deg, #fef5f8 0%, #f9f3f7 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      overflow-y: auto;
+      padding: 40px 20px;
+      z-index: 10;
+    }
+    
+    .birthday-content.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: transform 0.8s ease 0.5s, opacity 0.8s ease 0.5s;
+    }
+    
+    .birthday-content.visible .content-wrapper {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    /* Birthday card */
+    .birthday-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 60px 50px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .birthday-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent), #ff9acb, var(--accent-light));
+      border-radius: 0 0 10px 10px;
+    }
+    
+    .cake-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 30px;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+    }
+    
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    
+    .subtitle {
+      font-family: 'Archivo', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+    
+    .divider {
+      width: 80px;
+      height: 2px;
+      margin: 30px auto;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    
+    .message {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      text-align: left;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* Photo gallery */
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+    
+    .photo-item {
+      position: relative;
+      aspect-ratio: 4/5;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      transform: rotate(0deg);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    
+    .photo-item:nth-child(1) { animation: fadeInPhoto 0.6s ease 0.8s both; }
+    .photo-item:nth-child(2) { animation: fadeInPhoto 0.6s ease 1s both; }
+    .photo-item:nth-child(3) { animation: fadeInPhoto 0.6s ease 1.2s both; }
+    .photo-item:nth-child(4) { animation: fadeInPhoto 0.6s ease 1.4s both; }
+    
+    @keyframes fadeInPhoto {
+      from {
+        opacity: 0;
+        transform: translateY(30px) rotate(-5deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+    
+    .photo-item:hover {
+      transform: scale(1.05) rotate(2deg);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+      z-index: 5;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      body {
+        overflow: hidden;
+      }
+      
+      .envelope-container {
+        width: 280px;
+        height: 196px;
+      }
+      
+      .envelope-flap {
+        border-left: 140px solid transparent;
+        border-right: 140px solid transparent;
+        border-top: 98px solid var(--envelope-dark);
+      }
+      
+      .click-me {
+        font-size: 20px;
+      }
+      
+      .birthday-content {
+        padding: 15px 12px;
+        display: flex;
+        align-items: center;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      
+      .content-wrapper {
+        width: 100%;
+      }
+      
+      .birthday-card {
+        padding: 20px 16px;
+        margin-bottom: 0;
+      }
+      
+      .cake-icon {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 12px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+      
+      .subtitle {
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        margin-bottom: 12px;
+      }
+      
+      .divider {
+        width: 60px;
+        margin: 12px auto;
+      }
+      
+      .message {
+        font-size: 0.75rem;
+        line-height: 1.5;
+        margin-bottom: 0.8rem;
+        text-align: left;
+      }
+      
+      .photo-gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+      }
+      
+      .photo-item {
+        aspect-ratio: 3/4;
+        border-radius: 10px;
+      }
+      
+      .photo-item:nth-child(1) { animation: fadeInPhoto 0.4s ease 0.6s both; }
+      .photo-item:nth-child(2) { animation: fadeInPhoto 0.4s ease 0.7s both; }
+      .photo-item:nth-child(3) { animation: fadeInPhoto 0.4s ease 0.8s both; }
+      .photo-item:nth-child(4) { animation: fadeInPhoto 0.4s ease 0.9s both; }
+    }
+    
+    @media (max-width: 480px) {
+      .envelope-container {
+        width: 260px;
+        height: 182px;
+      }
+      
+      .envelope-flap {
+        border-left: 130px solid transparent;
+        border-right: 130px solid transparent;
+        border-top: 91px solid var(--envelope-dark);
+      }
+    }
+    
+    /* Fit everything in viewport for iPhone */
+    @media (max-width: 430px) and (max-height: 932px) {
+      .birthday-content {
+        padding: 10px 10px;
+      }
+      
+      .birthday-card {
+        padding: 15px 14px;
+      }
+      
+      .cake-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
+      }
+      
+      h1 {
+        font-size: 1.35rem;
+        margin-bottom: 6px;
+      }
+      
+      .subtitle {
+        font-size: 0.6rem;
+        margin-bottom: 10px;
+      }
+      
+      .divider {
+        margin: 10px auto;
+      }
+      
+      .message {
+        font-size: 0.7rem;
+        line-height: 1.45;
+        margin-bottom: 0.65rem;
+      }
+      
+      .photo-gallery {
+        gap: 8px;
+        margin-top: 12px;
+      }
+      
+      .photo-item {
+        border-radius: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating hearts background -->
+  <div class="floating-hearts" id="floatingHearts"></div>
+  
+  <!-- Envelope -->
+  <div class="envelope-container" id="envelopeContainer">
+    <div class="envelope">
+      <div class="envelope-flap"></div>
+      <div class="click-me">Click Me</div>
+      <div class="card"></div>
+    </div>
+  </div>
+  
+  <!-- Birthday content (shown after envelope opens) -->
+  <div class="birthday-content" id="birthdayContent">
+    <div class="content-wrapper">
+      <div class="birthday-card">
+        <img src="cake.gif" alt="Birthday cake" class="cake-icon">
+        
+        <h1>HAPPY 22nd BIRTHDAY<br>NASWA 💜</h1>
+        
+        <p class="subtitle">Happy Birthday!</p>
+        
+        <div class="divider"></div>
+        
+        <p class="message">
+          For the past 1.5 years with you have been some of the happiest, easiest times of my life.
+          We both know that we're not the super cheesy romantic type, but the way we laugh together,
+          joke around, and just get each other means more to me than anything dramatic ever could.
+          You make normal days better, boring moments fun, and even bad days easier just by being you.
+          I'm really grateful for you and for everything we share.
+        </p>
+        
+        <p class="message">
+          I really hope this year brings you a little bit of everything in happiness, peace, success,
+          and moments where life just feels easy. You've been working so hard, especially with college,
+          and I truly hope the rest of it goes smoothly and stress free.
+        </p>
+        
+        <p class="message">
+          I know you're capable of so much, and I can't wait to see us graduate and move into the next
+          chapter of our life. Whatever comes next, I hope it's full of good opportunities, laughs,
+          and things that make you proud. Happy Birthday! 🩶
+        </p>
+        
+        <div class="divider"></div>
+        
+        <!-- Photo gallery -->
+        <div class="photo-gallery">
+          <div class="photo-item">
+            <img src="1.jpeg" alt="Memory 1">
+          </div>
+          <div class="photo-item">
+            <img src="2.jpeg" alt="Memory 2">
+          </div>
+          <div class="photo-item">
+            <img src="3.jpeg" alt="Memory 3">
+          </div>
+          <div class="photo-item">
+            <img src="4.jpeg" alt="Memory 4">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Envelope opening interaction
+    const envelopeContainer = document.getElementById('envelopeContainer');
+    const birthdayContent = document.getElementById('birthdayContent');
+    
+    envelopeContainer.addEventListener('click', function() {
+      if (!this.classList.contains('opened')) {
+        this.classList.add('opened');
+        
+        // Show birthday content after envelope animation
+        setTimeout(() => {
+          birthdayContent.classList.add('visible');
+          // Hide envelope after content is visible
+          setTimeout(() => {
+            envelopeContainer.style.display = 'none';
+          }, 800);
+        }, 1500);
+      }
+    });
+    
+    // Create floating hearts
+    const floatingHearts = document.getElementById('floatingHearts');
+    const heartSymbols = ['💜', '🩷', '💗', '💝', '💖'];
+    
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+      
+      floatingHearts.appendChild(heart);
+      
+      // Remove heart after animation
+      setTimeout(() => {
+        heart.remove();
+      }, parseFloat(heart.style.animationDuration) * 1000);
+    }
+    
+    // Create hearts periodically
+    setInterval(createHeart, 2000);
+    
+    // Create initial hearts
+    for (let i = 0; i < 5; i++) {
+      setTimeout(createHeart, i * 400);
+    }
+    
+    // Create floating balloons
+    const balloonEmojis = ['🎈', '🎈', '🎈', '🎈'];
+    const balloonColors = ['#ff6b9d', '#c780e8', '#4facfe', '#feca57'];
+    
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      
+      // Random balloon emoji or colored circle
+      const useEmoji = Math.random() > 0.3;
+      if (useEmoji) {
+        balloon.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+      } else {
+        // Create a simple colored balloon using CSS
+        balloon.innerHTML = '🎈';
+        balloon.style.color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+      }
+      
+      const size = Math.random() * 20 + 35;
+      balloon.style.fontSize = size + 'px';
+      balloon.style.left = Math.random() * 100 + 'vw';
+      
+      const duration = Math.random() * 8 + 12;
+      const sway = (Math.random() - 0.5) * 80;
+      balloon.style.setProperty('--sway', sway + 'px');
+      balloon.style.animation = `balloon-float ${duration}s ease-in-out forwards`;
+      
+      floatingHearts.appendChild(balloon);
+      
+      // Remove balloon after animation
+      setTimeout(() => {
+        balloon.remove();
+      }, duration * 1000);
+    }
+    
+    // Create balloons periodically
+    setInterval(createBalloon, 1500);
+    
+    // Create initial balloons
+    for (let i = 0; i < 3; i++) {
+      setTimeout(createBalloon, i * 500);
+    }
+  </script>
+</body>
+</html>
